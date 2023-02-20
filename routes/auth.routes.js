@@ -10,7 +10,6 @@ const saltRounds = 10;
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
-const Deal = require("../models/Deal.model");
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
@@ -136,7 +135,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Remove the password field
           delete req.session.currentUser.password;
 
-          res.redirect("/auth/home")
+          res.render("auth/home");
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
     })
@@ -149,10 +148,13 @@ router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
 router.post("/profile/:id", (req, res, next) => {
-/*   let id =  req.params.id
-  User.findById(id) */
-  /* .populate("") */
- /*  res.redirect(/auth/profile) */
+  let id =  req.params.id
+  User.findById(id)
+  .populate("deal")
+  .then ( () => {
+    res.redirect("/auth/profile")
+  })
+  .catch((err) => next(err))  
 })
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
