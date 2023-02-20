@@ -23,6 +23,7 @@ const userSchema = new Schema(
       required: true,
     },
   },
+  /*   post: [{type: Schema.Types.ObjectId, ref ="Deal"}] */
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,

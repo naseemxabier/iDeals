@@ -15,10 +15,11 @@ const Deal = require("../models/Deal.model");
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
+const isAdmin = require("../middleware/isAdmin")
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
-  res.render("auth/signup");
+  res.render("auth/signup"); 
 });
 
 // POST /auth/signup
@@ -135,13 +136,24 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Remove the password field
           delete req.session.currentUser.password;
 
-          res.redirect("/");
+          res.redirect("/auth/home")
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
     })
     .catch((err) => next(err));
 });
-
+router.get("/home", (req, res, next) => {
+    res.render("auth/home")
+})
+router.get("/profile", (req, res, next) => {
+  res.render("auth/profile")
+})
+router.post("/profile/:id", (req, res, next) => {
+/*   let id =  req.params.id
+  User.findById(id) */
+  /* .populate("") */
+ /*  res.redirect(/auth/profile) */
+})
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
