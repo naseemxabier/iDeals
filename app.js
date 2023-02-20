@@ -9,7 +9,7 @@ require("./db");
 // https://www.npmjs.com/package/express
 const express = require("express");
 
-// Handles the handlebars
+// Handles the handlebar
 // https://www.npmjs.com/package/hbs
 const hbs = require("hbs");
 
