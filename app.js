@@ -30,6 +30,9 @@ app.use("/", indexRoutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
+/* const dealRoutes = require("./routes/deals.routes");
+app.use("/deals", dealRoutes); */
+
 /* const dealRoutes = require("./routes/deal.routes");
 app.use("/deal", dealRoutes);
  */
