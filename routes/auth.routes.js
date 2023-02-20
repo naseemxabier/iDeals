@@ -148,10 +148,13 @@ router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
 router.post("/profile/:id", (req, res, next) => {
-/*   let id =  req.params.id
-  User.findById(id) */
-  /* .populate("") */
- /*  res.redirect(/auth/profile) */
+  let id =  req.params.id
+  User.findById(id)
+  .populate("deal")
+  .then ( () => {
+    res.redirect("/auth/profile")
+  })
+  .catch((err) => next(err))  
 })
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
