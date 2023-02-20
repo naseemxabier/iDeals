@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const nodemailer = require("nodemailer")
+
 
 // ℹ️ Handles password encryption
 const bcrypt = require("bcrypt");
