@@ -1,3 +1,7 @@
+
+
+
+
 //get de la vista /deal/add
 
 //post de la ruta /add, de vista auth/home
