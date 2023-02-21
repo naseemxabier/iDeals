@@ -157,7 +157,7 @@ router.get("/home", (req, res, next) => {
 
 //Profile
 
-router.get("/profile", (req, res, next) => {
+router.get("/profile/:id", (req, res, next) => {
   res.render("auth/profile")
 })
 
