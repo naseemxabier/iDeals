@@ -1,51 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer")
-
-
-// ℹ️ Handles password encryption
+// :fuente_de_información: Handles password encryption
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-
 // How many rounds should bcrypt run the salt (default - 10 rounds)
 const saltRounds = 10;
-
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
-const Deal = require("../models/Deal.model");
-
+const Deal = require("../models/Deal.model")
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
-
+const uploader = require("../config/cloudinary.config");
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
-  res.render("auth/signup"); 
+  res.render("auth/signup");
 });
-
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res) => {
   const { username, email, password } = req.body;
-
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
     res.status(400).render("auth/signup", {
       errorMessage:
         "All fields are mandatory. Please provide your username, email and password.",
     });
-
     return;
   }
-
   if (password.length < 6) {
     res.status(400).render("auth/signup", {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
-
     return;
   }
-
   //   ! This regular expression checks password for special characters and minimum length
   /*
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
@@ -58,7 +47,6 @@ router.post("/signup", isLoggedOut, (req, res) => {
     return;
   }
   */
-
   // Create a new user - start by hashing the password
   bcrypt
     .genSalt(saltRounds)
@@ -83,26 +71,21 @@ router.post("/signup", isLoggedOut, (req, res) => {
       }
     });
 });
-
 // GET /auth/login
 router.get("/login", isLoggedOut, (req, res) => {
   res.redirect("/auth/home");
 });
-
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
-  const { username, email, password } = req.body;
-
+  const { username, /* email, */ password } = req.body;
   // Check that username, email, and password are provided
-  if (username === "" || email === "" || password === "") {
+  if (username === "" || /* email === "" || */ password === "") {
     res.status(400).render("auth/login", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
     });
-
     return;
   }
-
   // Here we use the same logic as above
   // - either length based parameters or we check the strength of a password
   if (password.length < 6) {
@@ -110,9 +93,8 @@ router.post("/login", isLoggedOut, (req, res, next) => {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
   }
-
   // Search the database for a user with the email submitted in the form
-  User.findOne({ email })
+  User.findOne({ username })
     .then((user) => {
       // If the user isn't found, send an error message that user provided wrong credentials
       if (!user) {
@@ -121,7 +103,6 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           .render("auth/login", { errorMessage: "Wrong credentials." });
         return;
       }
-
       // If user is found based on the username, check if the in putted password matches the one saved in the database
       bcrypt
         .compare(password, user.password)
@@ -132,12 +113,10 @@ router.post("/login", isLoggedOut, (req, res, next) => {
               .render("auth/home", { errorMessage: "Wrong credentials." });
             return;
           }
-
           // Add the user object to the session object
           req.session.currentUser = user.toObject();
           // Remove the password field
           delete req.session.currentUser.password;
-
           res.redirect("/deals/home");
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
@@ -145,16 +124,33 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     .catch((err) => next(err));
 });
 router.get("/home", (req, res, next) => {
-    res.render("auth/home")
+  Deal.find()
+  .populate("creator")
+  .then(result => {
+     /* console.log("result", result) */
+     res.render("auth/home",{result:result})
+  } )
 })
+//Profile
 router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
 router.post("/profile/:id", (req, res, next) => {
-/*   let id =  req.params.id
-  User.findById(id) */
-  /* .populate("") */
- /*  res.redirect(/auth/profile) */
+ let id =  req.params.id
+ User.findById(id)
+ .populate("posts")
+ .then ( () => {
+   res.redirect("/auth/profile")
+ })
+ .catch((err) => next(err))
+ })
+router.get("/profile/edit", (req, res, next) => {
+  res.render("auth/profile-edit")
+})
+router.post("/profile/:id/delete", (req, res, next) => {
+  User.findByIdAndDelete(req.params.id)
+  .then(()=> res.redirect("/auth/home"))
+  .catch((err) => next(err))
 })
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
@@ -163,9 +159,11 @@ router.get("/logout", isLoggedIn, (req, res) => {
       res.status(500).render("auth/logout", { errorMessage: err.message });
       return;
     }
-
     res.redirect("/");
   });
 });
-
 module.exports = router;
+
+
+
+
