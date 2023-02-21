@@ -69,7 +69,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
       return User.create({ username, email, password: hashedPassword });
     })
     .then((user) => {
-      res.redirect("/auth/login");
+      res.render("/auth/login");
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
@@ -87,7 +87,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
 
 // GET /auth/login
 router.get("/login", isLoggedOut, (req, res) => {
-  res.render("auth/login");
+  res.redirect("/auth/home");
 });
 
 // POST /auth/login
@@ -95,7 +95,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   const { username, /* email, */ password } = req.body;
 
   // Check that username, email, and password are provided
-  if (username === "" || /* email === "" || */ password === "") {
+  if (username === "" ||  email === "" || password === "") {
     res.status(400).render("auth/login", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
