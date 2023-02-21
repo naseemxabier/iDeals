@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const nodemailer = require("nodemailer")
+
 // :fuente_de_información: Handles password encryption
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
@@ -14,13 +14,16 @@ const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
 const uploader = require("../config/cloudinary.config");
+
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
   res.render("auth/signup");
 });
+
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res) => {
-  const { username, email, password } = req.body;
+router.post("/signup", isLoggedOut, (req, res, next) => {
+  const { username, email, password, notification } = req.body;
+  console.log(req.body)
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
     res.status(400).render("auth/signup", {
@@ -53,7 +56,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword });
+      return User.create({ username, email, password: hashedPassword, notification });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -68,7 +71,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
         });
       } else {
         next(error);
-      }
+      } 
     });
 });
 // GET /auth/login
@@ -163,7 +166,3 @@ router.get("/logout", isLoggedIn, (req, res) => {
   });
 });
 module.exports = router;
-
-
-
-
