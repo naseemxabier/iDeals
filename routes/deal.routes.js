@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const envioMail = require ("../utils/nodemailer")
 // :fuente_de_información: Handles password encryption
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
@@ -7,6 +8,7 @@ const mongoose = require("mongoose");
 const saltRounds = 10;
 // Require the User model in order to interact with the database
 /* const User = require("../models/User.model"); */
+const User = require("../models/User.model");
 const Deal = require("../models/Deal.model");
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
@@ -32,7 +34,8 @@ router.get('/add', (req,res,next)=>{
     res.render('deals/add')
 })
 router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
-  let {dealTitle, dealDescription, dealLocation} = req.body
+
+    let {dealTitle, dealDescription, dealLocation} = req.body
 console.log("img:", req.file)
  Deal.create({
         creator: req.session.currentUser,
@@ -41,19 +44,27 @@ console.log("img:", req.file)
         location: req.body.dealLocation,
         filepath: req.file.path,
   })
+ User.find({ notification : true})
   .then(result=>{
-     Deal.findById(result._id)
-     .populate("creator")
-     .then(response=>{
-        console.log("response",response)
-        res.status(200).redirect('/deals/home')
-     })
-     .catch(err=>next( err))
-  })
+    console.log(result)
+    result.forEach ((user)=> {
+        console.log("user:", user)
+        envioMail(user.email, "hola", "hola")
+        .then(result => {
+            console.log("hola")
+           res.redirect("/deals/home")
+        })
+    })
+  }) 
 })
-  
-router.get('/:id/details', (req,res,next)=>{
-    let id = req.params.id
+
+
+router.get('/details', (req,res,next)=>{
+    res.render('deals/details')
+})
+router.get('/:id/edit', (req,res,next)=>{
+    let {id} = req.params
+    console.log("id:",id)
     Deal.findById(id)
     .populate("creator")
     .then(result=>{
