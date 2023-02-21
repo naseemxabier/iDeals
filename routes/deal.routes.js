@@ -74,8 +74,15 @@ router.get('/:id/edit', (req,res,next)=>{
     })
 })
 
-
-
-//get de la ruta /details
+router.post('/:id/edit',  uploader.single("imagen"),(req,res,next)=>{
+    let {dealTitle, dealDescription, dealLocation} = req.body
+    console.log("req.body:", req.body)
+    let {id} = req.params
+    Deal.findOneAndUpdate(id, {dealTitle}, {new:true} )
+    .then(result=>{
+        console.log("Result edit", result)
+        res.redirect('/deals/home',{result:result})
+    })
+})
 
 module.exports = router;
