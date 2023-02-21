@@ -154,8 +154,9 @@ router.get("/home", (req, res, next) => {
 //Profile
 
 router.get("/profile", (req, res, next) => {
-  res.render("auth/profile",result)
+  res.render("auth/profile")
 })
+
 // router.post("/profile/:id", (req, res, next) => {
 //   let id =  req.params.id
 //   User.findById(id)
