@@ -12,13 +12,12 @@ const saltRounds = 10;
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
-const Deal = require("../models/Deal.model")
+const Deal = require("../models/Deal.model");
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
-const uploader = require("../config/cloudinary.config");
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
@@ -92,10 +91,10 @@ router.get("/login", isLoggedOut, (req, res) => {
 
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
-  const { username, /* email, */ password } = req.body;
+  const { username, email, password } = req.body;
 
   // Check that username, email, and password are provided
-  if (username === "" || /* email === "" || */ password === "") {
+  if (username === "" || email === "" || password === "") {
     res.status(400).render("auth/login", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
@@ -113,7 +112,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   }
 
   // Search the database for a user with the email submitted in the form
-  User.findOne({ username })
+  User.findOne({ email })
     .then((user) => {
       // If the user isn't found, send an error message that user provided wrong credentials
       if (!user) {
@@ -139,49 +138,24 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Remove the password field
           delete req.session.currentUser.password;
 
-          res.render("auth/home");
+          res.redirect("/auth /home")
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
     })
     .catch((err) => next(err));
 });
 router.get("/home", (req, res, next) => {
-  Deal.find()
-  .populate("creator")
-  .then(result => {
-     /* console.log("result", result) */
-     res.render("auth/home",{result:result})
-  } )  
+    res.render("auth/home")
 })
-
-//Profile
-
 router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
-
 router.post("/profile/:id", (req, res, next) => {
- let id =  req.params.id
- User.findById(id)
- .populate("posts")
- .then ( () => {
-   res.redirect("/auth/profile")
- })
- .catch((err) => next(err))  
- })
-
-router.get("/profile/edit", (req, res, next) => {
-  res.render("auth/profile-edit")
+/*   let id =  req.params.id
+  User.findById(id) */
+  /* .populate("") */
+ /*  res.redirect(/auth/profile) */
 })
-
-router.post("/profile/:id/delete", (req, res, next) => {
-  User.findByIdAndDelete(req.params.id)
-  .then(()=> res.redirect("/auth/home"))
-  .catch((err) => next(err))
-})
-
-
-
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
