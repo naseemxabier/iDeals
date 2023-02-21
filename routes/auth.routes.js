@@ -12,6 +12,7 @@ const saltRounds = 10;
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
+const Deal = require("../models/Deal.model")
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
@@ -159,15 +160,15 @@ router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
 
-// router.post("/profile/:id", (req, res, next) => {
-//   let id =  req.params.id
-//   User.findById(id)
-//   .populate("posts")
-//   .then ( () => {
-//     res.redirect("/auth/profile")
-//   })
-//   .catch((err) => next(err))  
-// })
+router.post("/profile/:id", (req, res, next) => {
+ let id =  req.params.id
+ User.findById(id)
+ .populate("posts")
+ .then ( () => {
+   res.redirect("/auth/profile")
+ })
+ .catch((err) => next(err))  
+ })
 
 router.get("/profile/edit", (req, res, next) => {
   res.render("auth/profile-edit")

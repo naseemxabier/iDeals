@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const dealSchema = new Schema({
-    creator: {type: Schema.Types.ObjectId, ref:"User"},
+    creator: {type: Schema.Types.ObjectId, ref:"user"},
     title: { type: String, unique: true, required: true },
     description: String,
     location: String, 

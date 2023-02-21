@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const saltRounds = 10;
 
 // Require the User model in order to interact with the database
-const User = require("../models/User.model");
+/* const User = require("../models/User.model"); */
 const Deal = require("../models/Deal.model");
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
@@ -42,7 +42,7 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
   let {dealTitle, dealDescription, dealLocation} = req.body
 console.log("img:", req.file)
  Deal.create({
-        creator:req.session.currentUser ,
+        creator:req.session.currentUser,
         title: req.body.dealTitle,
         description: req.body.dealDescription,
         location: req.body.dealLocation,
