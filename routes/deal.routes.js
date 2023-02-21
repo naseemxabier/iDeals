@@ -25,13 +25,14 @@ router.get('/deals/add', (req,res,next)=>{
 })
 
 router.get("/home", (req, res, next) => {
-     Deal.find()
-     .populate("creator")
-     .then(result => {
-        /* console.log("result", result) */
-        res.render("auth/home",{result:result})
-     } )  
-   })
+    Deal.find()
+    .populate("creator")
+    .then(result => {
+       /* console.log("result", result) */
+       console.log({result:result, user: req.session.currentUser})
+       res.render("auth/home",{result:result, user: req.session.currentUser}, )
+    } )
+  })
 
 //get de la vista /deal/add
 router.get('/add', (req,res,next)=>{
@@ -42,7 +43,7 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
   let {dealTitle, dealDescription, dealLocation} = req.body
 console.log("img:", req.file)
  Deal.create({
-        creator:req.session.currentUser,
+        creator: req.session.currentUser,
         title: req.body.dealTitle,
         description: req.body.dealDescription,
         location: req.body.dealLocation,
@@ -58,7 +59,7 @@ console.log("img:", req.file)
   })
 })
   
-router.get('/details', (req,res,next)=>{
+router.get('/details', (req,res,next)=>{ //hacer con "/deals/:id"
     res.render('deals/details')
 
 })
