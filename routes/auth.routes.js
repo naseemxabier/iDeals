@@ -144,18 +144,34 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 router.get("/home", (req, res, next) => {
     res.render("auth/home")
 })
+
+//Profile
+
 router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
 router.post("/profile/:id", (req, res, next) => {
   let id =  req.params.id
   User.findById(id)
-  .populate("deal")
+  .populate("posts")
   .then ( () => {
     res.redirect("/auth/profile")
   })
   .catch((err) => next(err))  
 })
+
+router.get("/profile/edit", (req, res, next) => {
+  res.render("auth/profile-edit")
+})
+
+router.post("/profile/:id/delete", (req, res, next) => {
+  User.findByIdAndDelete(req.params.id)
+  .then(()=> res.redirect("/auth/home"))
+  .catch((err) => next(err))
+})
+
+
+
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
