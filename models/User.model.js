@@ -1,20 +1,20 @@
 const { Schema, model } = require("mongoose");
 
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
-const dealSchema = new Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
-      required: false,
+      /* required: false,
       unique: true,
-      trim: true,
+      trim: true, */
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      /* required: true, */
+     /*  unique: true,
       trim: true,
-      lowercase: true,
+      lowercase: true, */
       /* validate: [validateEmail, "Please fill a valid email adress"], */
       /* match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'] */
     },
@@ -22,20 +22,15 @@ const dealSchema = new Schema(
       type: String,
       required: true,
     },
-    post:{
-      type:[{type: Schema.Types.ObjectId, ref:"Deal"}]
-    },
-    filepath: {
-      type: String,
-      // required: true
+    posts:{
+      type:[{type: Schema.Types.ObjectId, ref:"deal"}],
     }
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
 
-const Deal = model("Deal", dealSchema);
+const User = model("user", userSchema);
 
-module.exports = Deal;
+module.exports = User;

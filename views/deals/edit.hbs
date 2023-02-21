@@ -1,0 +1,30 @@
+<form action="/deals/{{result._id}}" method="POST" enctype="multipart/form-data" > 
+  <fieldset >
+    <legend>Edit your Deal</legend>
+    <div class="mb-3">
+      <label for="dealTitle" class="form-label">Title</label>
+      <input type="text" id="disabledTextInput"  name="dealTitle" class="form-control" placeholder="{{result.title}} ">
+    </div>
+    <div class="mb-3">
+      <label for="dealDescription" class="form-label">Description</label>
+      <input type="text" id="disabledTextInput"  name="dealDescription" class="form-control" placeholder="{{result.description}}">
+      
+    </div>
+     <div class="mb-3">
+      <label for="dealLocation" class="form-label">Location</label>
+      <input type="text" id="disabledTextInput"  name="dealLocation" class="form-control" placeholder="{{result.location}}">
+    </div>
+    <div>
+<div class="card" style="width: 18rem;">
+  <img src="{{result.filepath}}" class="card-img-top" alt="...">
+  <div class="card-body">
+    
+
+</div>
+        
+         <input type="file" name="imagen" id="imagen"/>
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </fieldset>
+</form>
