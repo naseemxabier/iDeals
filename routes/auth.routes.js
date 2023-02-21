@@ -157,15 +157,15 @@ router.get("/profile", (req, res, next) => {
   res.render("auth/profile")
 })
 
-// router.post("/profile/:id", (req, res, next) => {
-//   let id =  req.params.id
-//   User.findById(id)
-//   .populate("posts")
-//   .then ( () => {
-//     res.redirect("/auth/profile")
-//   })
-//   .catch((err) => next(err))  
-// })
+ router.post("/profile/:id", (req, res, next) => {
+  let id =  req.params.id
+  User.findById(id)
+  .populate("posts")
+  .then ( () => {
+    res.redirect("/auth/profile")
+   })
+   .catch((err) => next(err))  
+ })
 
 router.get("/profile/edit", (req, res, next) => {
   res.render("auth/profile-edit")
