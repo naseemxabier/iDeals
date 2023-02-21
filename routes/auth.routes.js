@@ -26,7 +26,7 @@ router.get("/signup", isLoggedOut, (req, res) => {
 });
 
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res) => {
+router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password } = req.body;
 
   // Check that username, email, and password are provided
@@ -66,7 +66,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword });
+      return User.create({ username, email, password: hashedPassword , notification});
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -87,7 +87,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
 
 // GET /auth/login
 router.get("/login", isLoggedOut, (req, res) => {
-  res.redirect("/auth/home");
+  res.redirect("/deals/home")
 });
 
 // POST /auth/login
@@ -136,6 +136,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 
           // Add the user object to the session object
           req.session.currentUser = user.toObject();
+          req.session.currentUser = email.toObject();
           // Remove the password field
           delete req.session.currentUser.password;
 
@@ -189,7 +190,6 @@ router.get("/logout", isLoggedIn, (req, res) => {
       res.status(500).render("auth/logout", { errorMessage: err.message });
       return;
     }
-
     res.redirect("/");
   });
 });

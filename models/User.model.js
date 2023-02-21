@@ -24,6 +24,9 @@ const userSchema = new Schema(
     },
     posts:{
       type:[{type: Schema.Types.ObjectId, ref:"deal"}],
+    },
+    notification:{
+      type: Boolean
     }
   },
   {

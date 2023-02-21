@@ -10,22 +10,22 @@
   </div>
 </div>
 </div> --}}
-<form action="/deal/:id/details">
+<form action="/deal/{{resul._id}}/details">
 <div class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
     <div class="col-md-4">
-      <img src="{{filepath}}" class="img-fluid rounded-start" alt="...">
+      <img src="{{result.filepath}}" class="img-fluid rounded-start" alt="...">
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <h5 class="card-title">{{title}}</h5>
-        <p class="card-text">{{description}}</p>
-        <p class="card-text" class="text-muted">{{location}}</p>
+        <h5 class="card-title">{{result.title}}</h5>
+        <p class="card-text">{{result.description}}</p>
+        <p class="card-text" class="text-muted">{{result.location}}</p>
 
-        <button type="button" class="btn btn-secondary">Edit Deal</button>
+        {{!-- <button type="button" class="btn btn-secondary"></button> --}}
       </div>
     </div>
   </div>
 </div>
-
+<a href="/deals/home">Home</a>
 </form>
