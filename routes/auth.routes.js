@@ -86,7 +86,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
 
 // GET /auth/login
 router.get("/login", isLoggedOut, (req, res) => {
-  res.render("auth/login");
+  res.redirect("/auth/home");
 });
 
 // POST /auth/login
@@ -129,7 +129,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           if (!isSamePassword) {
             res
               .status(400)
-              .render("auth/login", { errorMessage: "Wrong credentials." });
+              .render("auth/home", { errorMessage: "Wrong credentials." });
             return;
           }
 
@@ -138,7 +138,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Remove the password field
           delete req.session.currentUser.password;
 
-          res.redirect("/auth /home")
+          res.redirect("/deals/home");
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
     })
