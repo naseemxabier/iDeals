@@ -19,7 +19,7 @@ router.get("/signup", isLoggedOut, (req, res) => {
   res.render("auth/signup");
 });
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res) => {
+router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password } = req.body;
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
@@ -53,7 +53,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword });
+      return User.create({ username, email, password: hashedPassword , notification});
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -73,7 +73,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
 });
 // GET /auth/login
 router.get("/login", isLoggedOut, (req, res) => {
-  res.redirect("/auth/home");
+  res.render("auth/login");
 });
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
@@ -110,11 +110,13 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           if (!isSamePassword) {
             res
               .status(400)
-              .render("auth/home", { errorMessage: "Wrong credentials." });
+              .render("auth/login", { errorMessage: "Wrong credentials." });
             return;
           }
           // Add the user object to the session object
-          req.session.currentUser = user.toObject();
+          req.session.currentUser = user.toObject(username, password);
+          req.session.currentUser._id = user._id;
+          // console.log(req.session.currentUser)
           // Remove the password field
           delete req.session.currentUser.password;
           res.redirect("/deals/home");
@@ -123,33 +125,29 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     })
     .catch((err) => next(err));
 });
-router.get("/home", (req, res, next) => {
-  Deal.find()
-  .populate("creator")
-  .then(result => {
-     /* console.log("result", result) */
-     res.render("auth/home",{result:result})
-  } )
-})
+
+
 //Profile
-router.get("/profile", (req, res, next) => {
-  res.render("auth/profile")
-})
-router.post("/profile/:id", (req, res, next) => {
- let id =  req.params.id
+router.get("/profile/:id", (req, res, next) => {
+  let id =  req.params.id
+  // console.log("id:", id)
  User.findById(id)
  .populate("posts")
  .then ( () => {
-   res.redirect("/auth/profile")
+  res.render("auth/profile", {user: req.session.currentUser})
  })
  .catch((err) => next(err))
  })
-router.get("/profile/edit", (req, res, next) => {
-  res.render("auth/profile-edit")
+
+
+router.get("/profile/:id/edit", (req, res, next) => { 
+  res.render("auth/profile-edit", {user: req.session.currentUser})
 })
 router.post("/profile/:id/delete", (req, res, next) => {
-  User.findByIdAndDelete(req.params.id)
-  .then(()=> res.redirect("/auth/home"))
+  let baby = req.params.id
+  User.findByIdAndDelete(baby)
+  .then(()=> {
+    res.redirect("/deals/home")})
   .catch((err) => next(err))
 })
 // GET /auth/logout

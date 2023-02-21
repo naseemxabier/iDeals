@@ -16,49 +16,24 @@
         <li class="nav-item">
           <a class="nav-link" href="/auth/profile">Profile</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown link
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
+        {{!-- <li>
+          <p> Bienvenido {{data.username}}</p>
+        </li> --}}
       </ul>
     </div>
   </div>
 </nav>
-{{!--  {{#each result}}
-<div class="card" style="width: 18rem;">
-  <h1>hola</h1>
-  <img src="{{filepath}}" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{title}}</h5>
-    <p class="card-text">{{description}}</p>
-    <p class="card-text">{{location}}</p>
-     <p class="card-text">{{creator.username}}</p>
-  </div>
-</div>
-</div>
- {{/each}} --}}
 <div class="row">
     {{#each result}}
   <div class="col-md-4 ">
     <div class="thumbnail bg-dark p-2 g-col-6 mt-2">
-<p class=" fs-4 text-white">{{title}}</p>
+        <p class=" fs-4 text-white">{{title}}</p>
         <img src="{{filepath}}" alt="Lights" style="width:100%" />
-       {{!--  <div class="caption">
-          <a href="/tracks/{{id}}" class="btn btn-danger">Listen some music!</a>
-        </div> --}}
-         <p class="card-text text-white">Description: <br>{{description}}</p>
-    <p class="card-text text-white">Location: <br>{{location}}</p>
-     <p class="card-text text-white">User: <br>{{creator.username}}</p>
-{{!-- <form action="/deals/{{_id}}/edit" method="GET">
-<button type="button"  class="btn btn-light">Edit</button>
-</form> --}}
-    <a href="/deals/{{_id}}/edit">Edit</a>
+        <p class="card-text text-white">Description: <br>{{description}}</p>
+        <p class="card-text text-white">Location: <br>{{location}}</p>
+        <p class="card-text text-white">User: <br>{{creator.username}}</p>
+        <a href="/deals/{{_id}}/edit">Edit</a>
+        <a href="/deals/{{_id}}/details">Details</a>
     </div>
   </div>
    {{/each}}

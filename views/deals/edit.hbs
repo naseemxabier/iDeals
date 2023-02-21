@@ -3,28 +3,32 @@
     <legend>Edit your Deal</legend>
     <div class="mb-3">
       <label for="dealTitle" class="form-label">Title</label>
-      <input type="text" id="disabledTextInput"  name="dealTitle" class="form-control" placeholder="{{result.title}} ">
+      <input value="{{result.title}}" type="text" id="disabledTextInput"  name="dealTitle" class="form-control" >
     </div>
     <div class="mb-3">
       <label for="dealDescription" class="form-label">Description</label>
-      <input type="text" id="disabledTextInput"  name="dealDescription" class="form-control" placeholder="{{result.description}}">
+      <input  value="{{result.description}}" type="text" id="disabledTextInput"  name="dealDescription" class="form-control" >
       
     </div>
      <div class="mb-3">
       <label for="dealLocation" class="form-label">Location</label>
-      <input type="text" id="disabledTextInput"  name="dealLocation" class="form-control" placeholder="{{result.location}}">
+      <input  value="{{result.location}}" type="text" id="disabledTextInput"  name="dealLocation" class="form-control" >
     </div>
     <div>
 <div class="card" style="width: 18rem;">
   <img src="{{result.filepath}}" class="card-img-top" alt="...">
   <div class="card-body">
     
-
+    
 </div>
         
          <input type="file" name="imagen" id="imagen"/>
     </div>
    
     <button type="submit" class="btn btn-primary">Submit</button>
+    <br>
   </fieldset>
+  <form action="/deals/{{result._id}}/delete" method="POST" > 
+  <button type="submit" class="btn btn-primary">Delete</button>
+  </form>
 </form>
