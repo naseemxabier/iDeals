@@ -15,6 +15,7 @@ const User = require("../models/User.model");
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
+const uploader = require("../config/cloudinary.config");
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
@@ -88,10 +89,10 @@ router.get("/login", isLoggedOut, (req, res) => {
 
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, /* email, */ password } = req.body;
 
   // Check that username, email, and password are provided
-  if (username === "" || email === "" || password === "") {
+  if (username === "" || /* email === "" || */ password === "") {
     res.status(400).render("auth/login", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
@@ -109,7 +110,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   }
 
   // Search the database for a user with the email submitted in the form
-  User.findOne({ email })
+  User.findOne({ username })
     .then((user) => {
       // If the user isn't found, send an error message that user provided wrong credentials
       if (!user) {
@@ -142,13 +143,18 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     .catch((err) => next(err));
 });
 router.get("/home", (req, res, next) => {
-    res.render("auth/home")
+  Deal.find()
+  .populate("creator")
+  .then(result => {
+     /* console.log("result", result) */
+     res.render("auth/home",{result:result})
+  } )  
 })
 
 //Profile
 
 router.get("/profile", (req, res, next) => {
-  res.render("auth/profile")
+  res.render("auth/profile",result)
 })
 // router.post("/profile/:id", (req, res, next) => {
 //   let id =  req.params.id
