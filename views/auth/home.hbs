@@ -11,7 +11,7 @@
           <a class="nav-link active" aria-current="page" href="/auth/home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Add a new deal!</a>
+          <a class="nav-link" href="/deals/add">Add Deal</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/auth/profile">Profile</a>
@@ -31,4 +31,41 @@
   </div>
 </nav>
 
+{{!--  {{#each result}} 
+<div class="card" style="width: 18rem;">
+  <h1>hola</h1>
+  <img src="{{filepath}}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text">{{description}}</p>
+    <p class="card-text">{{location}}</p>
+     <p class="card-text">{{creator.username}}</p> 
+  </div>
+</div>
+</div>
+ {{/each}} --}} 
+
+
+<div class="row">
+    {{#each result}}
+  <div class="col-md-4 ">
+    <div class="thumbnail bg-dark p-2 g-col-6 mt-2">
+<p class=" fs-4 text-white">{{title}}</p>
+        <img src="{{filepath}}" alt="Lights" style="width:100%" />
+       {{!--  <div class="caption"> 
+          <a href="/tracks/{{id}}" class="btn btn-danger">Listen some music!</a>
+        </div> --}}
+         <p class="card-text text-white">Description: <br>{{description}}</p>
+    <p class="card-text text-white">Location: <br>{{location}}</p>
+     <p class="card-text text-white">User: <br>{{creator.username}}</p> 
+
+{{!-- <form action="/deals/{{_id}}/edit" method="GET">
+<button type="button"  class="btn btn-light">Edit</button>
+</form> --}}
+      
+    <a href="/deals/{{_id}}/edit">Edit</a> 
+
+    </div>
+  </div>
+   {{/each}}
 </div>

@@ -1,13 +1,20 @@
 const { Schema, model } = require("mongoose");
 
 const dealSchema = new Schema({
-    creator: [{type: Schema.Types.ObjectId, ref:"User"}],
+    creator: {type: Schema.Types.ObjectId, ref:"User"},
     title: { type: String, unique: true, required: true },
     description: String,
-    place: String,
-    image: String, /* (?????), */
-    created :{
-      type: Date,
-      default : Date.now
-    }
-  });
+    location: String, 
+    filepath: {
+        type: String,
+         required: true
+      }
+  },
+  { 
+    timestamps: true
+  }
+  );
+
+  const Deal = model("deal", dealSchema);
+
+module.exports = Deal;
