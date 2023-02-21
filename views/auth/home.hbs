@@ -23,9 +23,6 @@
     </div>
   </div>
 </nav>
-
-
-
 <div class="row">
     {{#each result}}
   <div class="col-md-4 ">
@@ -34,16 +31,10 @@
         <img src="{{filepath}}" alt="Lights" style="width:100%" />
         <p class="card-text text-white">Description: <br>{{description}}</p>
         <p class="card-text text-white">Location: <br>{{location}}</p>
-        <p class="card-text text-white">User: <br>{{creator.username}}</p> 
-      
-        <a href="/deals/{{_id}}/edit">Edit</a> 
+        <p class="card-text text-white">User: <br>{{creator.username}}</p>
+        <a href="/deals/{{_id}}/edit">Edit</a>
         <a href="/deals/{{_id}}/details">Details</a>
     </div>
   </div>
    {{/each}}
 </div>
-
-
-
-
-
