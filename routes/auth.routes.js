@@ -133,7 +133,7 @@ router.get("/profile/:id", (req, res, next) => {
   let id =  req.params.id
   // console.log("id:", id)
  User.findById(id)
- .populate("posts")
+/*  .populate("posts") */
  .then ( () => {
   res.render("auth/profile", {user: req.session.currentUser})
  })

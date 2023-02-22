@@ -51,7 +51,7 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
 })
 .catch(err=> console.log(err))
 
- /*  .then(result=>{
+ .then(result=>{
     User.find({ notification : true})
     .then(result=>{
       console.log("resultFind",result)
@@ -65,7 +65,7 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
       })
     }) 
   })
-  .catch(err=>next(err)) */
+  .catch(err=>next(err))
  
 })
 
