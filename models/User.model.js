@@ -29,8 +29,11 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    role: String
-  },
+    role: String,
+    avatar: {
+      type: String
+  }
+},
   {
     timestamps: true,
   }

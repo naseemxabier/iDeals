@@ -23,7 +23,7 @@ router.get("/signup", isLoggedOut, (req, res) => {
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password, notification } = req.body;
-  console.log(req.body)
+  // console.log(req.body)
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
     res.status(400).render("auth/signup", {
@@ -120,6 +120,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           req.session.currentUser = user.toObject(username, password);
           req.session.currentUser._id = user._id;
           req.session.currentUser.role = user.role;
+          req.session.currentUser.email = user.email;
           // console.log(req.session.currentUser)
           // Remove the password field
           delete req.session.currentUser.password;
@@ -135,10 +136,12 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 //Profile
 router.get("/profile/:id", (req, res, next) => {
   let id =  req.params.id
+
+  // console.log("id:", id)
   Deal.find({creator:id})
   .then(resulDeal=>{
-     console.log("resulDeal",resulDeal) 
-    res.render("auth/profile",{resulDeal,user: req.session.currentUser})
+    //  console.log("resulDeal",resulDeal) 
+    res.render("auth/profile",{resulDeal, user: req.session.currentUser})
   })
   .catch(e =>(console.log(e)))
   
@@ -149,13 +152,51 @@ router.get("/profile/:id", (req, res, next) => {
   res.render("auth/profile-edit", {user: req.session.currentUser})
 })
 
-router.post("/profile/:id/edit", (req, res, next) => {
-  let {username} = req.body
-  User.findByIdAndUpdate(id, {username}, {new: true})
+router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => {
+  let id = req.params.id
+  let img = req.file.path
+  console.log("img:", img)
+  let {username, email, password, repeatpassword} = req.body
+  // console.log(req.body)
+  let avatar = req.params.avatar;
+  let camposUpdate = {username, email, avatar};
+  camposUpdate.username.avatar = img.path;
+  if(password !== "" && repeatpassword !== "")  {
+    let salt = bcrypt.genSaltSync(saltRounds);
+    let hashedPass = bcrypt.hashSync(password, salt);
+    let hashedRepPass = bcrypt.hashSync(repeatpassword, salt);
+    camposUpdate.password = hashedPass
+    camposUpdate.repeatpassword = hashedRepPass
+  }
+  // bcrypt
+  //   .genSalt(saltRounds)
+  //   .then((salt) => bcrypt.hash(password, salt))
+  //   .then((hashPassword) => {
+  //     // Create a user and save it in the database
+  //     return User.create({password: hashPassword});
+  //   })
+  User.findByIdAndUpdate(id, camposUpdate, {new: true})
   .then (result => {
-    console.log("resultadoupdate:", result)
-    res.redirect("/auth/profile")
+    if (username === "" || email === "" ) {
+      res.status(400).render("auth/profile-edit", {user: req.session.currentUser,
+        errorMessage:
+          "All fields are mandatory. Please provide your username, email and password.",
+      });
+    }
+    if (password !== "" && password.length !== 6 && repeatpassword !== "" && repeatpassword.length !== 6) {
+      // console.log("antes del errorMessage")
+      return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "Please check your password, should be 6 characthers long"})
+    }
+    if (password !== repeatpassword) {
+      return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "Please check your password, seems not the same"})
+    }
+    // console.log("resultadoupdate:", result)
+    req.session.currentUser.username = username;
+    req.session.currentUser.email = email;
+    // console.log("despues del errorMessage")
+    res.redirect(`/auth/profile/${id}`)
   })
+  .catch((err) => next(err));
 })
 
 router.post("/profile/:id/delete", (req, res, next) => {
