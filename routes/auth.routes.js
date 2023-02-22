@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 // :fuente_de_información: Handles password encryption
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
@@ -14,12 +13,11 @@ const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
 const uploader = require("../config/cloudinary.config");
-
+const { populate } = require("../models/User.model");
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
   res.render("auth/signup");
 });
-
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password, notification } = req.body;
@@ -56,7 +54,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword, notification });
+      return User.create({ username, email, password: hashedPassword, notification, role: "user" });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -71,7 +69,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         });
       } else {
         next(error);
-      } 
+      }
     });
 });
 // GET /auth/login
@@ -119,6 +117,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Add the user object to the session object
           req.session.currentUser = user.toObject(username, password);
           req.session.currentUser._id = user._id;
+          req.session.currentUser.role = user.role;
           // console.log(req.session.currentUser)
           // Remove the password field
           delete req.session.currentUser.password;
@@ -128,8 +127,6 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     })
     .catch((err) => next(err));
 });
-
-
 //Profile
 router.get("/profile/:id", (req, res, next) => {
   let id =  req.params.id
@@ -141,9 +138,16 @@ router.get("/profile/:id", (req, res, next) => {
  })
  .catch((err) => next(err))
  })
-
-
-router.get("/profile/:id/edit", (req, res, next) => { 
+// router.post("/profile/:id", (req, res, next) => { //hacer "profile/:id/profile-edit"
+//  let id =  req.params.id
+//  User.findById(id)
+//  .populate("posts")
+//  .then ( () => {
+//    res.redirect("/auth/profile")
+//  })
+//  .catch((err) => next(err))
+//  })
+router.get("/profile/:id/edit", (req, res, next) => {
   res.render("auth/profile-edit", {user: req.session.currentUser})
 })
 router.post("/profile/:id/delete", (req, res, next) => {
@@ -164,3 +168,6 @@ router.get("/logout", isLoggedIn, (req, res) => {
   });
 });
 module.exports = router;
+
+
+

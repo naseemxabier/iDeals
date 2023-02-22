@@ -25,7 +25,7 @@ router.get("/home", (req, res, next) => {
     .then(result => {
        /* console.log("result", result) */
        console.log({result:result, user: req.session.currentUser})
-       res.render("auth/home",{result:result, user: req.session.currentUser}, )
+       res.render("auth/home",{result:result, user: req.session.currentUser})
     } )
   })
 
