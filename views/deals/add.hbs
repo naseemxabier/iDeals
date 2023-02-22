@@ -1,8 +1,11 @@
+
+{{>nav}}
+
+
 <h1>Add your deal</h1>
 
 <form action="/deals/add" method="POST" enctype="multipart/form-data" > 
   <fieldset >
-    <legend>Add your Deal!</legend>
     <div class="mb-3">
       <label for="dealTitle" class="form-label">Deal Name</label>
       <input type="text" id="disabledTextInput"  name="dealTitle" class="form-control" placeholder="Uber Eats">
@@ -20,14 +23,16 @@
          <label for="imagen">Upload your Image</label>
          <input type="file" name="imagen" id="imagen"/>
     </div>
-    {{!-- <div class="mb-3">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
-        <label class="form-check-label" for="disabledFieldsetCheck">
-          Can't check this
-        </label>
-      </div>
-    </div> --}}
     <button type="submit" class="btn btn-primary">Submit</button>
+   
   </fieldset>
-</form>
+    {{#if errorMessage}}
+      <p class="error">{{errorMessage}}</p>
+    {{/if}}
+  </form>
+
+  
+  
+
+ 
+

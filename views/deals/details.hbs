@@ -1,4 +1,7 @@
+{{>nav}}
+
 <h1>DETAILS</h1>
+
 
 {{!-- <div class="card" style="width: 18rem;">
   <img src="{{filepath}}" class="card-img-top" alt="...">
@@ -21,10 +24,21 @@
         <h5 class="card-title">{{result.title}}</h5>
         <p class="card-text">{{result.description}}</p>
         <p class="card-text" class="text-muted">{{result.location}}</p>
+        <br>
+             
+            {{#if isAdmin}}
+            <h1>puto boton</h1>
+  <form action="/deals/{{result._id}}/delete" method="POST" > 
+  <button type="submit" class="btn btn-primary text-dark">Delete</button>
+  </form>
+  {{/if}} 
+             
+ 
 
         {{!-- <button type="button" class="btn btn-secondary"></button> --}}
       </div>
     </div>
+  
   </div>
 </div>
 <a href="/deals/home">Home</a>

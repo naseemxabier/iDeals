@@ -1,3 +1,5 @@
+{{>nav}}
+
 <form action="/deals/{{result._id}}/edit" method="POST" enctype="multipart/form-data" > 
   <fieldset >
     <legend>Edit your Deal</legend>
@@ -28,7 +30,12 @@
     <button type="submit" class="btn btn-primary">Submit</button>
     <br>
   </fieldset>
-  <form action="/deals/{{result._id}}/delete" method="POST" > 
-  <button type="submit" class="btn btn-primary">Delete</button>
-  </form>
+  {{#if errorMessage}}
+      <p class="error">{{errorMessage}}</p>
+    {{/if}}
+  
+  
+  
+ 
 </form>
+

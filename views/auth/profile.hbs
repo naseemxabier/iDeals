@@ -1,6 +1,8 @@
+{{>nav}}
+
 <section style="background-color: #d85d5d;">
 <div>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+{{!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">iDeals</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,20 +27,26 @@
       </ul>
     </div>
   </div>
-</nav>
+</nav> --}}
 </div>
 <div class="row">
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+          {{#if user.avatar}}
+            <img src="{{user.avatar}}" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
+              {{else}}
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+              {{/if}}
             <h5 class="my-3">{{user.username}}</h5>
             <div class="d-flex justify-content-center mb-2">
               <a class="btn btn-primary ms-1" href="/auth/profile/{{user._id}}/edit" >Edit profile</a>
               <form action="/auth/profile/{{user._id}}/delete" method="post">
               <button type="submit" class="btn btn-danger ms-1">Delete profile</button>
               </form>
+              {{!-- "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" --}}
             </div>
           </div>
         </div>
@@ -77,6 +85,7 @@
         </div>
 <div class="row row-cols-1 row-cols-md-3 g-4">
   <div class="col">
+    {{#if resulDeal}}
     {{#each resulDeal}}
     <div class="card h-15">
       <img src="{{filepath}}" class="card-img-top " alt="...">
@@ -84,8 +93,12 @@
         <h5 class="card-title">Tite: <br>{{title}}</h5>
         <p class="card-text">Description <br>{{description}}</p>
         <p class="card-text">Location <br>{{location}}</small></p>
+    
+       
+      <a href="/deals/{{_id}}/edit">Edit</a>
     </div>
   </div>
   {{/each}}
-</div>
+  {{/if}}
+</div>     
 </section>
