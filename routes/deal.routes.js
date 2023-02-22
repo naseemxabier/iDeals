@@ -52,6 +52,7 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
         description: req.body.dealDescription,
         location: req.body.dealLocation,
         filepath: req.file.path,
+        
   })
   .then(result => {
      /* console.log("resultmail", result) */ 
@@ -60,13 +61,12 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
     .catch(err=> console.log(err))
 
  .then(result=>{
+    console.log(result)
     User.find({ notification : true})
     .then(result=>{
-      console.log("resultFind",result)
       result.forEach ((user)=> {
-          envioMail(user.email, "hola", "hola")
+          envioMail(user.email, "Latest deals!", user.username, dealTitle, dealDescription, dealLocation, img)
           .then(result => {
-              console.log("resultmail", result)
              res.redirect("/deals/home")
           })
           .catch(err=> console.log(err))
