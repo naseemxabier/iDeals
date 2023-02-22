@@ -121,6 +121,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // console.log(req.session.currentUser)
           // Remove the password field
           delete req.session.currentUser.password;
+          
           res.redirect("/deals/home");
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
@@ -150,6 +151,16 @@ router.get("/profile/:id", (req, res, next) => {
 router.get("/profile/:id/edit", (req, res, next) => {
   res.render("auth/profile-edit", {user: req.session.currentUser})
 })
+
+router.post("/profile/:id/edit", (req, res, next) => {
+  let {username} = req.body
+  User.findByIdAndUpdate(id, {username}, {new: true})
+  .then (result => {
+    console.log("resultadoupdate:", result)
+    res.redirect("/auth/profile")
+  })
+})
+
 router.post("/profile/:id/delete", (req, res, next) => {
   let baby = req.params.id
   User.findByIdAndDelete(baby)
