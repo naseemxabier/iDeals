@@ -34,14 +34,20 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+          {{#if user.avatar}}
+            <img src="{{user.avatar}}" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
+              {{else}}
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+              {{/if}}
             <h5 class="my-3">{{user.username}}</h5>
             <div class="d-flex justify-content-center mb-2">
               <a class="btn btn-primary ms-1" href="/auth/profile/{{user._id}}/edit" >Edit profile</a>
               <form action="/auth/profile/{{user._id}}/delete" method="post">
               <button type="submit" class="btn btn-danger ms-1">Delete profile</button>
               </form>
+              {{!-- "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" --}}
             </div>
           </div>
         </div>
@@ -81,6 +87,7 @@
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
   <div class="col">
+    {{#if resulDeal}}
     {{#each resulDeal}}
     <div class="card h-15">
       <img src="{{filepath}}" class="card-img-top " alt="...">
@@ -91,5 +98,6 @@
     </div>
   </div>
   {{/each}}
+  {{/if}}
 </div>     
 </section>
