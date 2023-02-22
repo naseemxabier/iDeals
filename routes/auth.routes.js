@@ -56,7 +56,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword, notification });
+      return User.create({ username, email, password: hashedPassword, notification, role: "user" });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -119,9 +119,11 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Add the user object to the session object
           req.session.currentUser = user.toObject(username, password);
           req.session.currentUser._id = user._id;
+          req.session.currentUser.role = user.role;
           // console.log(req.session.currentUser)
           // Remove the password field
           delete req.session.currentUser.password;
+          
           res.redirect("/deals/home");
         })
         .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
@@ -133,19 +135,29 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 //Profile
 router.get("/profile/:id", (req, res, next) => {
   let id =  req.params.id
-  // console.log("id:", id)
- User.findById(id)
- .populate("posts")
- .then ( () => {
-  res.render("auth/profile", {user: req.session.currentUser})
- })
- .catch((err) => next(err))
- })
+  Deal.find({creator:id})
+  .then(resulDeal=>{
+     console.log("resulDeal",resulDeal) 
+    res.render("auth/profile",{resulDeal,user: req.session.currentUser})
+  })
+  .catch(e =>(console.log(e)))
+  
+})
 
-
-router.get("/profile/:id/edit", (req, res, next) => { 
+ 
+ router.get("/profile/:id/edit", (req, res, next) => {
   res.render("auth/profile-edit", {user: req.session.currentUser})
 })
+
+router.post("/profile/:id/edit", (req, res, next) => {
+  let {username} = req.body
+  User.findByIdAndUpdate(id, {username}, {new: true})
+  .then (result => {
+    console.log("resultadoupdate:", result)
+    res.redirect("/auth/profile")
+  })
+})
+
 router.post("/profile/:id/delete", (req, res, next) => {
   let baby = req.params.id
   User.findByIdAndDelete(baby)

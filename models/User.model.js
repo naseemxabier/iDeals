@@ -22,13 +22,14 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    posts:{
+    /* posts:{
       type:[{type: Schema.Types.ObjectId, ref:"deal"}],
-    },
+    }, */
     notification: {
       type: Boolean,
       default: true,
     },
+    role: String
   },
   {
     timestamps: true,
