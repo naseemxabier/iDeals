@@ -17,14 +17,14 @@ const uploader = require("../config/cloudinary.config");
 // GET /auth/signup
 
 router.get('/admin', (req,res,next)=>{
-  console.log("Admin")
-  res.render('auth/admin', {user: req.session.currentUser})
+  console.log("user")
+  res.render('auth/admin', req.session.currentUser)
 })
 
 router.post('/admin', (req,res,next)=>{
   let {username, password, passwordAdmin} = req.body
   let id=req.session.currentUser 
-console.log("USER",req.session.currentUser )
+console.log("USER", req.session.currentUser)
 
        if(passwordAdmin === "soyadmin"){
         User.findByIdAndUpdate(id, {isAdmin:true}, {new:true})
@@ -44,7 +44,9 @@ router.get("/signup", isLoggedOut, (req, res,next) => {
 });
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
-  const { username, email, password, notification } = req.body;
+  const {username, email, password, notification} = req.body;
+  
+  console.log("result",req.body.username)
 /*   if(req.body.notification === undefined) notification == "off";
   console.log("notification:" , req.body.notification); */
   // console.log(req.body)
@@ -86,7 +88,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       return User.create({ username, email, password: hashedPassword, notification, role: "user", /*avatar*/ });
     })
     .then((user) => {
-      res.redirect("/auth/login");
+      res.redirect("/");
     })
     .catch((error) => {
       if (error instanceof mongoose.Error.ValidationError) {
@@ -103,7 +105,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
 });
 // GET /auth/login
  router.get("/login", isLoggedOut, (req, res) => {
-  res.render("auth/login");
+  res.render("index");
 });
 
 
@@ -113,7 +115,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   
   // Check that username, email, and password are provided
   if (username === "" || password === "") {
-    res.status(400).render("auth/login", {
+    res.status(400).render("index", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
     });
@@ -122,7 +124,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   // Here we use the same logic as above
   // - either length based parameters or we check the strength of a password
   if (password.length < 6) {
-    return res.status(400).render("auth/login", {
+    return res.status(400).render("index", {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
   }  
@@ -133,7 +135,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
       if (!user) {
         res
           .status(400)
-          .render("auth/login", { errorMessage: "Wrong credentials." });
+          .render("index", { errorMessage: "Wrong credentials." });
         return;
       }
       // If user is found based on the username, check if the in putted password matches the one saved in the database
@@ -143,7 +145,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           if (!isSamePassword) {
             res
               .status(400)
-              .render("auth/login", { errorMessage: "Wrong credentials." });
+              .render("index", { errorMessage: "Wrong credentials." });
             return;
           }
           // Add the user object to the session object

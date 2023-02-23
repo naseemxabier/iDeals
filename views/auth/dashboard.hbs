@@ -1,12 +1,11 @@
-<h1> Users</h1>
-<a href="/deals/home">Home</a>
+<div>
+   {{>nav}}
+<div class="row mx-auto ms-5">
 
-<div class="row">
     {{#each result}}
-  <div class="col-md-4 ">
+  <div class="card mx-3 mb-3 mt-3" style="width: 18rem">
     <div class="thumbnail bg-dark p-2 g-col-6 mt-2">
         <p class=" fs-4 text-white">Username:{{username}}</p>
-       {{!--  <img src="{{filepath}}" alt="Lights" style="width:100%" /> --}}
         <p class="card-text text-white">Email: <br>{{email}}</p>
         <p class="card-text text-white">Is Admin: <br>{{isAdmin}}</p>
 
@@ -20,3 +19,4 @@
   </div>
    {{/each}}
 </div>
+
