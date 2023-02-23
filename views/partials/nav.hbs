@@ -1,13 +1,7 @@
-
-
-  
+ <nav class="navbar navbar-expand-lg bg-body-tertiary" class="navbar bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="">iDeals</a>
     
-<h1 clas="text-dark">Bienvenido {{user.username}}</h1>
-
-<div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-    <a class="navbar-brand" href="/deals/home">iDeals</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -19,18 +13,25 @@
         <li class="nav-item">
           <a class="nav-link" href="/deals/add">Add Deal</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/auth/profile/{{user._id}}">Profile</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/auth/profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Profile
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/auth/profile/{{user._id}}">My profile</a></li>
+            <li><a class="dropdown-item" href="/admin">Admin</a></li>
+            {{#if isAdmin}}
+            <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
+            {{/if}}
+            <li><a class="dropdown-item" href="/">Logout</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/auth/logout">Log Out</a>
-        </li>
-        
-         <li class="nav-item">
-          {{!-- <p> Bienvenido {{user.username}}</p> --}}
-        </li> 
       </ul>
+    </div>
+    <div> 
+      <a class="navbar-brand">Bienvenido {{user.username}}</a>
     </div>
   </div>
 </nav>
-</div>
+
+<a class="text-dark"></a>
