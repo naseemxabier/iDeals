@@ -33,13 +33,8 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-          {{#if user.avatar}}
             <img src="{{user.avatar}}" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
-              {{else}}
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-              class="rounded-circle img-fluid" style="width: 150px;">
-              {{/if}}
             <h5 class="my-3">{{user.username}}</h5>
             <div class="d-flex justify-content-center mb-2">
               <a class="btn btn-primary ms-1" href="/auth/profile/{{user._id}}/edit" >Edit profile</a>

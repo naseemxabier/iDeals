@@ -21,6 +21,8 @@ router.get("/signup", isLoggedOut, (req, res) => {
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password, notification } = req.body;
+  // if(req.body.notification === "undefined") notification == "off";
+  console.log("notification:" , req.body.notification);
   // console.log(req.body)
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
@@ -36,10 +38,9 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
     return;
   }
-  if(notification == false) {
-    console.log("HOLAAAAAA")
-    notification == true
-  return;}
+  // if(notification) {
+  //   envioMail(email, subject, name, dealTitle, dealDescription, dealLocation, img);
+  // return;}
 
   //   ! This regular expression checks password for special characters and minimum length
   /*
@@ -59,7 +60,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword, notification, role: "user" });
+      return User.create({ username, email, password: hashedPassword, notification, role: "user", /*avatar*/ });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -124,6 +125,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           req.session.currentUser._id = user._id;
           req.session.currentUser.role = user.role;
           req.session.currentUser.email = user.email;
+          req.session.currentUser.notification = user.notification
           // console.log(req.session.currentUser)
           // Remove the password field
           delete req.session.currentUser.password;
@@ -150,32 +152,46 @@ router.get("/profile/:id", (req, res, next) => {
 
  
  router.get("/profile/:id/edit", (req, res, next) => {
+  if(req.session.currentUser.notification === "on") {
+  res.render("auth/profile-edit", {user: req.session.currentUser, status: true})
+return;
+  }
   res.render("auth/profile-edit", {user: req.session.currentUser})
 })
-
+//filtro para que si es undefined reasignar valor a off, y si no es undefined que reasigne el valor a on. pasarlo al currentUser despues del update en el post del edit, 
 router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => {
   let id = req.params.id
-  let img = req.file.path
-  console.log("img:", img)
-  let {username, email, password, repeatpassword} = req.body
-  // console.log(req.body)
-  let avatar = req.params.avatar;
-  let camposUpdate = {username, email, avatar};
-  camposUpdate.username.avatar = img.path;
-  if(password !== "" && repeatpassword !== "")  {
+  let {username, email, password, repeatpassword, notification} = req.body
+  let camposUpdate = {username, email, notification};
+  if(req.body.notification === undefined) {
+    console.log("console.log del notification en el post del edit:", notification)
+    camposUpdate.notification = "off";
+  }
+   if(req.file) {
+    console.log("req.file.path:", req.file.path)
+    camposUpdate.avatar = req.file.path;
+   }
+
+  //   if(camposUpdate.notification == "off" && req.body.notification == "on"){
+  //     camposUpdate.notification == "on"
+  //   } if(camposUpdate.notification == "on" && req.body.notification == false)
+  //   camposUpdate.notification == "off"
+  //  }) 
+  //  .catch((err) => next(err));
+   
+  // if(!password && !req.file && password == "" || !req.file && repeatpassword == "" && !repeatpassword)  {
+  //   return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "You should fill both password fields"})
+  // }
+  if (password !== repeatpassword) {
+    return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "Password and Repeat password must be the same"})
+  }
+  if (password !== "" && password.length !== 6 || repeatpassword !== "" && repeatpassword.length !== 6) {
+    return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "Please check your password, should be 6 characthers long"})
+  }
     let salt = bcrypt.genSaltSync(saltRounds);
     let hashedPass = bcrypt.hashSync(password, salt);
-    let hashedRepPass = bcrypt.hashSync(repeatpassword, salt);
-    camposUpdate.password = hashedPass
-    camposUpdate.repeatpassword = hashedRepPass
-  }
-  // bcrypt
-  //   .genSalt(saltRounds)
-  //   .then((salt) => bcrypt.hash(password, salt))
-  //   .then((hashPassword) => {
-  //     // Create a user and save it in the database
-  //     return User.create({password: hashPassword});
-  //   })
+    camposUpdate.password = hashedPass;
+
   User.findByIdAndUpdate(id, camposUpdate, {new: true})
   .then (result => {
     if (username === "" || email === "" ) {
@@ -184,16 +200,16 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
           "All fields are mandatory. Please provide your username, email and password.",
       });
     }
-    if (password !== "" && password.length !== 6 && repeatpassword !== "" && repeatpassword.length !== 6) {
-      // console.log("antes del errorMessage")
-      return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "Please check your password, should be 6 characthers long"})
-    }
-    if (password !== repeatpassword) {
-      return res.status(400).render("auth/profile-edit", {user: req.session.currentUser, errorMessage: "Please check your password, seems not the same"})
-    }
     // console.log("resultadoupdate:", result)
     req.session.currentUser.username = username;
     req.session.currentUser.email = email;
+    req.session.currentUser.notification = camposUpdate.notification;
+    if(req.file) {
+      console.log("req.file.path:", req.file.path)
+      req.session.currentUser.avatar = camposUpdate.avatar;
+      
+     }
+    
     // console.log("despues del errorMessage")
     res.redirect(`/auth/profile/${id}`)
   })

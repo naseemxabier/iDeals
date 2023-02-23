@@ -23,7 +23,7 @@ router.get("/home", (req, res, next) => {
     Deal.find()
     .populate("creator")
     .then(result => {
-       console.log("resultHOME", result) 
+    //    console.log("resultHOME", result) 
        /* console.log({result, user: req.session.currentUser}) */
        res.render("auth/home",{result:result, user: req.session.currentUser}, )
     } )
@@ -62,7 +62,7 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
 
  .then(result=>{
     console.log(result)
-    User.find({ notification : true})
+    User.find({ notification: "on"})
     .then(result=>{
       result.forEach ((user)=> {
           envioMail(user.email, "Latest deals!", user.username, dealTitle, dealDescription, dealLocation, img)

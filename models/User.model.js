@@ -25,13 +25,19 @@ const userSchema = new Schema(
     /* posts:{
       type:[{type: Schema.Types.ObjectId, ref:"deal"}],
     }, */
+    // notification: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     notification: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "off",
+      enum: ["on", "off"]
     },
     role: String,
     avatar: {
-      type: String
+      type: String,
+      default: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
   }
 },
   {
