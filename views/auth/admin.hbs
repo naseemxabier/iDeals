@@ -1,0 +1,14 @@
+<div id="login-form">
+  <h2>Log In</h2>
+  <form action="/auth/admin" method="POST">
+    <label for="passwordAdmin"> Admin Password
+      <input type="password" name="passwordAdmin" placeholder="Your password" />
+    </label>
+
+    <button type="submit">Log In</button>
+
+
+    {{#if errorMessage}}
+      <p class="error">{{errorMessage}}</p>
+    {{/if}}
+  </form>

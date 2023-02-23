@@ -29,7 +29,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    role: String,
+    isAdmin: {
+      type:Boolean,
+    default:false},
     avatar: {
       type: String
   }
