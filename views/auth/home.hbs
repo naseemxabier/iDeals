@@ -20,4 +20,19 @@
     </div>
   </div>
    {{/each}}
+</div> --}}
+<div class="row">
+  {{#each result}}
+
+<div class="card" class="mx-auto" style="width: 200px">
+  <img src="{{filepath}}" class="rounded float-start" alt="Lights">
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text">{{description}}</p>
+    <p class="card-text">{{location}}</p>
+    <p class="card-text">{{creator.username}}</p>
+    <a href="/deals/{{_id}}/details">Details</a>
+  </div>
+</div>
+   {{/each}}
 </div>
