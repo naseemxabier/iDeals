@@ -240,7 +240,7 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
      }
     
     // console.log("despues del errorMessage")
-    res.redirect(`/auth/profile`)
+    res.redirect(`/auth/profile/${id}`)
   })
   .catch((err) => next(err));
 

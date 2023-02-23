@@ -2,33 +2,43 @@
 {{>nav}}
 
 
-<h1>Add your deal</h1>
+
 
 <form action="/deals/add" method="POST" enctype="multipart/form-data" > 
+<div class="container py-5">
+  <h1>Add your deal</h1>
   <fieldset >
-    <div class="mb-3">
-      <label for="dealTitle" class="form-label">Deal Name</label>
+    
+    <div class="row mb-4">
+      <label for="dealTitle" class="col-sm-2 col-form-label">Deal Name</label>
+      <div class="col-sm-10">
       <input type="text" id="disabledTextInput"  name="dealTitle" class="form-control" placeholder="Uber Eats">
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="dealDescription" class="form-label">Description</label>
+    <div class="row mb-4">
+      <label for="dealDescription" class="col-sm-2 col-form-label">Description</label>
+      <div class="col-sm-10">
       <input type="text" id="disabledTextInput"  name="dealDescription" class="form-control" placeholder="Spend €15, pay €7!!!">
-      
+      </div>
     </div>
-     <div class="mb-3">
-      <label for="dealLocation" class="form-label">Location</label>
+     <div class="row mb-4">
+      <label for="dealLocation" class="col-sm-2 col-form-label">Location</label>
+      <div class="col-sm-10">
       <input type="text" id="disabledTextInput"  name="dealLocation" class="form-control" placeholder="App Uber Eats">
+      </div>
     </div>
-    <div>
-         <label for="imagen">Upload your Image</label>
+    <div class="row mb-4">
+         <label class="col-sm-2" for="imagen">Upload your Image</label>
+         <div class="col-sm-10">
          <input type="file" name="imagen" id="imagen"/>
+         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-   
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
   </fieldset>
     {{#if errorMessage}}
       <p class="error">{{errorMessage}}</p>
     {{/if}}
+    </div>
   </form>
 
   

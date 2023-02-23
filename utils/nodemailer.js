@@ -7,7 +7,7 @@ module.exports = function (email, subject, {name, dealTitle, dealDescription, de
     from: `"iDeals " <${process.env.EMAIL_ADDRESS}>`,
     to: email,
     subject: subject,
-    text: name, dealTitle, dealDescription, dealLocation,
+    text: name, dealTitle, dealDescription, dealLocation, img,
     html: templates.templateExample({name, dealTitle, dealDescription, dealLocation, img}),
   })
 }
