@@ -1,15 +1,22 @@
-
-<div id="login-form">
-  <h2>Log In</h2>
-  <form action="/auth/admin" method="POST">
-    <label for="passwordAdmin"> Admin Password
-      <input type="password" name="passwordAdmin" placeholder="Your password" />
-    </label>
-
-    <button type="submit">Log In</button>
-
-
+  <div class="login">
+    
+  <form class="form_container" action="/auth/admin" method="POST">
+  <div class="logo_container"><img class="logo_container w-60 h-60" src="/images/bombillita.png" alt="Bombilla"></div>
+  <div class="title_container">
+    <p class="title">Enter to your Admin dashboard in iDeals</p>
+    <span class="subtitle">Enter your Admin code</span>
+  </div>
+  <br>
+  <div class="input_container">
+    <label type="password" name="passwordAdmin" placeholder="Your password">Admin password</label>
+    <input placeholder="Password" title="Inpit title" name="passwordAdmin" type="password" class="input_field" id="password_field">
+  </div>
+  <button title="Sign In" type="submit" class="sign-in_btn">
+    <span>Log In</span>
+  </button>
+  </form>
+  </div>
+  
     {{#if errorMessage}}
       <p class="error">{{errorMessage}}</p>
     {{/if}}
-  </form> 

@@ -1,7 +1,9 @@
- <nav class="navbar navbar-expand-lg bg-body-tertiary" class="navbar bg-dark" data-bs-theme="dark">
+ <nav class="navbar navbar-expand-lg bg-body-tertiary navbar bg-red rounded mb-3" data-bs-theme="light"> 
   <div class="container-fluid">
-    <a class="navbar-brand" href="">iDeals</a>
-    
+    <a class="navbar-brand" href="/deals/home">
+      iDeals
+      </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,9 +29,11 @@
           </ul>
         </li>
       </ul>
+
     </div>
-    <div> 
-      <a class="navbar-brand">Bienvenido {{user.username}}</a>
+        <div> 
+      <a
+       class="navbar-brand">Bienvenid@ {{user.username}}</a>
     </div>
   </div>
 </nav>
