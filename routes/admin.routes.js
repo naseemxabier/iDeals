@@ -14,6 +14,11 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
 const uploader = require("../config/cloudinary.config");
 
+/*  router.get("/", (req, res, next) => {
+res.render("auth/dashboard", {user: req.session.currentUser })
+        }) 
+ */
+
 router.get("/dashboard", (req, res, next) => {
     User.find()
         .then(result => {

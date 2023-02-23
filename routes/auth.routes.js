@@ -22,7 +22,7 @@ router.get('/admin', (req,res,next)=>{
 })
 
 router.post('/admin', (req,res,next)=>{
-  let {username, password, passwordAdmin} = req.body
+  let {passwordAdmin} = req.body
   let id=req.session.currentUser 
 console.log("USER",req.session.currentUser )
 
@@ -34,7 +34,6 @@ console.log("USER",req.session.currentUser )
             res.redirect("/deals/home")
           })
         }
-
       })
 
 
@@ -43,11 +42,10 @@ router.get("/signup", isLoggedOut, (req, res,next) => {
   res.render("auth/signup");
 });
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res, next) => {
+router.post("/signup",  isLoggedOut,  (req, res, next) => {
   const { username, email, password, notification } = req.body;
-/*   if(req.body.notification === undefined) notification == "off";
-  console.log("notification:" , req.body.notification); */
-  // console.log(req.body)
+  console.log("result:", req.body)
+
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
     res.status(400).render("auth/signup", {
@@ -62,9 +60,6 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
     return;
   }
-  // if(notification) {
-  //   envioMail(email, subject, name, dealTitle, dealDescription, dealLocation, img);
-  // return;}
   //   ! This regular expression checks password for special characters and minimum length
   /*
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
@@ -83,7 +78,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword, notification, role: "user", /*avatar*/ });
+      return User.create({ username, email, password: hashedPassword, notification, role: "user", });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -101,19 +96,18 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       }
     });
 });
-// GET /auth/login
+
  router.get("/login", isLoggedOut, (req, res) => {
   res.render("auth/login");
 });
 
 
-// POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
   const { username, password } = req.body;
   
   // Check that username, email, and password are provided
   if (username === "" || password === "") {
-    res.status(400).render("auth/login", {
+    res.status(400).render("/", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
     });
@@ -122,7 +116,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   // Here we use the same logic as above
   // - either length based parameters or we check the strength of a password
   if (password.length < 6) {
-    return res.status(400).render("auth/login", {
+    return res.status(400).render("/", {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
   }  
@@ -133,7 +127,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
       if (!user) {
         res
           .status(400)
-          .render("auth/login", { errorMessage: "Wrong credentials." });
+          .render("/", { errorMessage: "Wrong credentials." });
         return;
       }
       // If user is found based on the username, check if the in putted password matches the one saved in the database
@@ -143,7 +137,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           if (!isSamePassword) {
             res
               .status(400)
-              .render("auth/login", { errorMessage: "Wrong credentials." });
+              .render("/", { errorMessage: "Wrong credentials." });
             return;
           }
           // Add the user object to the session object
@@ -157,20 +151,17 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           delete req.session.currentUser.password;
           
           res.redirect("/deals/home")
-          //res.redirect("/deals/home");
         })
         .catch((err) => console.log(err)); // In this case, we send error handling to the error handling middleware.
     })
     .catch((err) => console.log(err));
 });
-//Profile
+
 router.get("/profile/:id", (req, res, next) => {
   let id =  req.params.id
 
-  // console.log("id:", id)
   Deal.find({creator:id})
-  .then(resulDeal=>{
-    //  console.log("resulDeal",resulDeal) 
+  .then(resulDeal=>{ 
     res.render("auth/profile",{resulDeal, user: req.session.currentUser})
   })
   .catch(e =>(console.log(e)))
