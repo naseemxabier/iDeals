@@ -1,26 +1,5 @@
 <div>
    {{>nav}} 
-   <a href="/auth/admin">Admin</a>
-   {{#if user.isAdmin}}  
-          <a class="nav-link" href="/admin/dashboard">Admin Dashboard</a>
-         {{/if}} 
-
-<div class="row">
-    {{#each result}}
-  <div class="col-md-4 ">
-    <div class="thumbnail bg-dark p-2 g-col-6 mt-2">
-        <p class=" fs-4 text-white">{{title}}</p>
-        <img src="{{filepath}}" alt="Lights" style="width:100%" />
-        <p class="card-text text-white">Description: <br>{{description}}</p>
-        <p class="card-text text-white">Location: <br>{{location}}</p>
-        <p class="card-text text-white">User: <br>{{creator.username}}</p>
-        
-      
-        <a href="/deals/{{_id}}/details">Details</a>
-    </div>
-  </div>
-   {{/each}}
-</div> --}}
 <div class="row">
   {{#each result}}
 
