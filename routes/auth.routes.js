@@ -16,11 +16,14 @@ const uploader = require("../config/cloudinary.config");
 const { populate } = require("../models/User.model");
 // GET /auth/signup
 router.get("/signup", isLoggedOut, (req, res) => {
+
   res.render("auth/signup");
 });
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password, notification } = req.body;
+/*   if(req.body.notification === undefined) notification == "off";
+  console.log("notification:" , req.body.notification); */
   // console.log(req.body)
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
@@ -36,11 +39,9 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
     return;
   }
-  if(notification == false) {
-    console.log("HOLAAAAAA")
-    notification == true
-  return;}
-
+  // if(notification) {
+  //   envioMail(email, subject, name, dealTitle, dealDescription, dealLocation, img);
+  // return;}
   //   ! This regular expression checks password for special characters and minimum length
   /*
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
@@ -59,7 +60,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword, notification, role: "user" });
+      return User.create({ username, email, password: hashedPassword, notification, role: "user", /*avatar*/ });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -78,12 +79,13 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
 });
 // GET /auth/login
-router.get("/login", isLoggedOut, (req, res) => {
+/* router.get("/login", isLoggedOut, (req, res) => {
   res.render("auth/login");
-});
+}); */
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
   const { username, /* email, */ password } = req.body;
+  
   // Check that username, email, and password are provided
   if (username === "" || /* email === "" || */ password === "") {
     res.status(400).render("auth/login", {
@@ -98,7 +100,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     return res.status(400).render("auth/login", {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
-  }
+  }  
   // Search the database for a user with the email submitted in the form
   User.findOne({ username })
     .then((user) => {
@@ -128,11 +130,12 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Remove the password field
           delete req.session.currentUser.password;
           
-          res.redirect("/deals/home");
+          res.redirect("/deals/home")
+          //res.redirect("/deals/home");
         })
-        .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
+        .catch((err) => console.log(err)); // In this case, we send error handling to the error handling middleware.
     })
-    .catch((err) => next(err));
+    .catch((err) => console.log(err));
 });
 //Profile
 router.get("/profile/:id", (req, res, next) => {
@@ -155,13 +158,12 @@ router.get("/profile/:id", (req, res, next) => {
 
 router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => {
   let id = req.params.id
-  let img = req.file.path
-  console.log("img:", img)
+  /* let img = req.file.path */
   let {username, email, password, repeatpassword} = req.body
   // console.log(req.body)
-  let avatar = req.params.avatar;
-  let camposUpdate = {username, email, avatar};
-  camposUpdate.username.avatar = img.path;
+  
+  let camposUpdate = {username, email};
+
   if(password !== "" && repeatpassword !== "")  {
     let salt = bcrypt.genSaltSync(saltRounds);
     let hashedPass = bcrypt.hashSync(password, salt);
@@ -176,6 +178,11 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
   //     // Create a user and save it in the database
   //     return User.create({password: hashPassword});
   //   })
+/*   User.findByIdAndUpdate(img)
+  .then(result => {
+    console.log("resultimg:", result)
+    res.render("auth/profile/${id}")
+  }) */
   User.findByIdAndUpdate(id, camposUpdate, {new: true})
   .then (result => {
     if (username === "" || email === "" ) {
@@ -195,7 +202,7 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
     req.session.currentUser.username = username;
     req.session.currentUser.email = email;
     // console.log("despues del errorMessage")
-    res.redirect(`/auth/profile/${id}`)
+    res.redirect(`/auth/profile`)
   })
   .catch((err) => next(err));
 })

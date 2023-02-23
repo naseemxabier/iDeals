@@ -31,7 +31,7 @@ const userSchema = new Schema(
     },
     role: String,
     avatar: {
-      type: String
+      type: String,
   }
 },
   {
