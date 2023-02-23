@@ -180,6 +180,7 @@ return;
 router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => {
   let id = req.params.id
   let {username, email, password, repeatpassword, notification} = req.body
+  console.log("req.body del post edit:", req.body)
   let camposUpdate = {username, email, notification};
   if(req.body.notification === undefined) {
     console.log("console.log del notification en el post del edit:", notification)
@@ -229,7 +230,7 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
      }
     
     // console.log("despues del errorMessage")
-    res.redirect(`/auth/profile`)
+    res.redirect(`/auth/profile/${id}`)
   })
   .catch((err) => next(err));
 
