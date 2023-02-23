@@ -23,9 +23,9 @@ router.get("/home", (req, res, next) => {
     Deal.find()
     .populate("creator")
     .then(result => {
-    //    console.log("resultHOME", result) 
+    /*    console.log("resultHOME", result)  */
        /* console.log({result, user: req.session.currentUser}) */
-       res.render("auth/home",{result:result, user: req.session.currentUser}, )
+       res.render("auth/home",{result:result.reverse(), user: req.session.currentUser}, )
     } )
   })
 
@@ -38,7 +38,8 @@ router.get("/home", (req, res, next) => {
 router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
     let {dealTitle, dealDescription, dealLocation} = req.body
     let img = req.file
-    console.log("img:", img)
+    /* console.log("img:", img) */
+
 
  if(dealTitle === "" || dealDescription === "" || dealLocation === "" || !img ){
 
@@ -54,18 +55,14 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
         filepath: req.file.path,
         
   })
-  .then(result => {
-     /* console.log("resultmail", result) */ 
-   res.redirect("/deals/home")
-})
-    .catch(err=> console.log(err))
+
 
  .then(result=>{
     console.log(result)
     User.find({ notification: "on"})
     .then(result=>{
       result.forEach ((user)=> {
-          envioMail(user.email, "Latest deals!", user.username, dealTitle, dealDescription, dealLocation, img)
+          envioMail(user.email, "Latest deals!", {name: user.username, dealTitle, dealDescription, dealLocation, img})
           .then(result => {
              res.redirect("/deals/home")
           })
@@ -82,11 +79,11 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
 router.get('/:id/details', (req,res,next)=>{
 
    let id = req.params.id
-   console.log("id:",id)
    Deal.findById(id)
     .populate("creator")
     .then(result=>{
-    /* console.log("result", result) */
+     console.log("resultAAAAAAA", result) 
+     console.log("Session", req.session.currentUser )
         res.render('deals/details', {result:result, user: req.session.currentUser})
    })
     .catch(err=>next( err))
@@ -143,11 +140,11 @@ router.post('/:id/edit',  uploader.single("imagen"),(req,res,next)=>{
 
 router.post('/:id/delete', (req, res, next) => {
     const _id = req.params.id
-    console.log('_id/delete',_id) 
+ /*    console.log('_id/delete',_id)  */
 
     Deal.findByIdAndDelete(_id)
         .then(result => {
-            console.log("deleted")
+            /* console.log("deleted") */
             res.redirect('/deals/home')
         })
         .catch(err => next(err))

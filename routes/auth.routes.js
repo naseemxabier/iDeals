@@ -13,16 +13,40 @@ const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const isAdmin = require("../middleware/isAdmin")
 const uploader = require("../config/cloudinary.config");
-const { populate } = require("../models/User.model");
+
 // GET /auth/signup
-router.get("/signup", isLoggedOut, (req, res) => {
+
+router.get('/admin', (req,res,next)=>{
+  console.log("Admin")
+  res.render('auth/admin', {user: req.session.currentUser})
+})
+
+router.post('/admin', (req,res,next)=>{
+  let {username, password, passwordAdmin} = req.body
+  let id=req.session.currentUser 
+console.log("USER",req.session.currentUser )
+
+       if(passwordAdmin === "soyadmin"){
+        User.findByIdAndUpdate(id, {isAdmin:true}, {new:true})
+        .then(result=>{
+          req.session.currentUser.isAdmin = true;
+            console.log("response", result)
+            res.redirect("/deals/home")
+          })
+        }
+
+      })
+
+
+
+router.get("/signup", isLoggedOut, (req, res,next) => {
   res.render("auth/signup");
 });
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password, notification } = req.body;
-  // if(req.body.notification === "undefined") notification == "off";
-  console.log("notification:" , req.body.notification);
+/*   if(req.body.notification === undefined) notification == "off";
+  console.log("notification:" , req.body.notification); */
   // console.log(req.body)
   // Check that username, email, and password are provided
   if (username === "" || email === "" || password === "") {
@@ -41,7 +65,6 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
   // if(notification) {
   //   envioMail(email, subject, name, dealTitle, dealDescription, dealLocation, img);
   // return;}
-
   //   ! This regular expression checks password for special characters and minimum length
   /*
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
@@ -79,14 +102,17 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
 });
 // GET /auth/login
-router.get("/login", isLoggedOut, (req, res) => {
+ router.get("/login", isLoggedOut, (req, res) => {
   res.render("auth/login");
 });
+
+
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
-  const { username, /* email, */ password } = req.body;
+  const { username, password } = req.body;
+  
   // Check that username, email, and password are provided
-  if (username === "" || /* email === "" || */ password === "") {
+  if (username === "" || password === "") {
     res.status(400).render("auth/login", {
       errorMessage:
         "All fields are mandatory. Please provide username, email and password.",
@@ -99,7 +125,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     return res.status(400).render("auth/login", {
       errorMessage: "Your password needs to be at least 6 characters long.",
     });
-  }
+  }  
   // Search the database for a user with the email submitted in the form
   User.findOne({ username })
     .then((user) => {
@@ -130,11 +156,12 @@ router.post("/login", isLoggedOut, (req, res, next) => {
           // Remove the password field
           delete req.session.currentUser.password;
           
-          res.redirect("/deals/home");
+          res.redirect("/deals/home")
+          //res.redirect("/deals/home");
         })
-        .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
+        .catch((err) => console.log(err)); // In this case, we send error handling to the error handling middleware.
     })
-    .catch((err) => next(err));
+    .catch((err) => console.log(err));
 });
 //Profile
 router.get("/profile/:id", (req, res, next) => {
@@ -211,18 +238,28 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
      }
     
     // console.log("despues del errorMessage")
-    res.redirect(`/auth/profile/${id}`)
+    res.redirect(`/auth/profile`)
   })
   .catch((err) => next(err));
+
+})
+router.post("/profile/:id/delete", (req, res, next) => {
+  let id = req.params.id
+  User.findByIdAndDelete(id)
+  .then(()=> {
+    req.session.destroy((err) => {
+      if (err) {
+        res.status(500).render("auth/logout", { errorMessage: err.message });
+        return;
+      }
+      res.redirect("/");
+    })
+  
+})
+.catch((err) => next(err))
 })
 
-router.post("/profile/:id/delete", (req, res, next) => {
-  let baby = req.params.id
-  User.findByIdAndDelete(baby)
-  .then(()=> {
-    res.redirect("/deals/home")})
-  .catch((err) => next(err))
-})
+
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
@@ -234,6 +271,3 @@ router.get("/logout", isLoggedIn, (req, res) => {
   });
 });
 module.exports = router;
-
-
-

@@ -1,3 +1,4 @@
+
 {{>nav}}
 
 <h1>DETAILS</h1>
@@ -26,16 +27,12 @@
         <p class="card-text" class="text-muted">{{result.location}}</p>
         <br>
              
-            {{#if isAdmin}}
-            <h1>puto boton</h1>
+             {{#if user.isAdmin}}
   <form action="/deals/{{result._id}}/delete" method="POST" > 
   <button type="submit" class="btn btn-primary text-dark">Delete</button>
   </form>
-  {{/if}} 
+   {{/if}}  
              
- 
-
-        {{!-- <button type="button" class="btn btn-secondary"></button> --}}
       </div>
     </div>
   

@@ -1,29 +1,10 @@
 <div>
    {{>nav}} 
-{{!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/deals/home">iDeals</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/deals/home">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/deals/add">Add Deal</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/auth/profile/{{user._id}}">Profile</a>
-        </li>
-         <li>
-          <p> Bienvenido {{data.username}}</p>
-        </li> 
-      </ul>
-    </div>
-  </div>
-</nav> --}}
+   <a href="/auth/admin">Admin</a>
+   {{#if user.isAdmin}}  
+          <a class="nav-link" href="/admin/dashboard">Admin Dashboard</a>
+         {{/if}} 
+
 <div class="row">
     {{#each result}}
   <div class="col-md-4 ">
@@ -38,5 +19,20 @@
         <a href="/deals/{{_id}}/details">Details</a>
     </div>
   </div>
+   {{/each}}
+</div> --}}
+<div class="row">
+  {{#each result}}
+
+<div class="card" class="mx-auto" style="width: 200px">
+  <img src="{{filepath}}" class="rounded float-start" alt="Lights">
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text">{{description}}</p>
+    <p class="card-text">{{location}}</p>
+    <p class="card-text">{{creator.username}}</p>
+    <a href="/deals/{{_id}}/details">Details</a>
+  </div>
+</div>
    {{/each}}
 </div>

@@ -34,7 +34,9 @@ const userSchema = new Schema(
       default: "off",
       enum: ["on", "off"]
     },
-    role: String,
+    isAdmin: {
+      type:Boolean,
+    default:false},
     avatar: {
       type: String,
       default: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"

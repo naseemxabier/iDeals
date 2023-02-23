@@ -1,5 +1,5 @@
 
-function templateExample (name, dealTitle, dealDescription, dealLocation, img) { 
+function templateExample ({name, dealTitle, dealDescription, dealLocation, img}) { 
   return `
     <!DOCTYPE html>
     <html lang="en">
