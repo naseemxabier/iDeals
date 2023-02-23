@@ -102,7 +102,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     });
 });
 // GET /auth/login
-/* router.get("/login", isLoggedOut, (req, res) => {
+ router.get("/login", isLoggedOut, (req, res) => {
   res.render("auth/login");
 });
 
@@ -230,8 +230,8 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
     res.redirect(`/auth/profile`)
   })
   .catch((err) => next(err));
-})
 
+})
 router.post("/profile/:id/delete", (req, res, next) => {
   let id = req.params.id
   User.findByIdAndDelete(id)
@@ -260,6 +260,3 @@ router.get("/logout", isLoggedIn, (req, res) => {
   });
 });
 module.exports = router;
-
-
-
