@@ -45,6 +45,7 @@ router.get("/signup", isLoggedOut, (req, res,next) => {
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res, next) => {
   const { username, email, password, notification } = req.body;
+  console.log("req.body:", req.body)
 /*   if(req.body.notification === undefined) notification == "off";
   console.log("notification:" , req.body.notification); */
   // console.log(req.body)
