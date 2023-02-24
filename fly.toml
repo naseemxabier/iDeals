@@ -1,12 +1,9 @@
-# fly.toml file generated for ideals2 on 2023-02-23T14:53:18+01:00
+# fly.toml file generated for project-ideals on 2023-02-24T10:40:24+01:00
 
-app = "ideals2"
+app = "project-ideals"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
-
-[build]
-  image = "flyio/hellofly:latest"
 
 [env]
 
