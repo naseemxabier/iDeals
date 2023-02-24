@@ -17,7 +17,7 @@ const uploader = require("../config/cloudinary.config");
 
 
 router.get('/admin', (req,res,next)=>{
-  console.log("user")
+  
   res.render('auth/admin', req.session.currentUser)
 })
 
@@ -29,7 +29,7 @@ router.post('/admin', (req,res,next)=>{
         User.findByIdAndUpdate(id, {isAdmin:true}, {new:true})
         .then(result=>{
           req.session.currentUser.isAdmin = true;
-            console.log("response", result)
+           
             res.redirect("/deals/home")
           })
         }
@@ -145,7 +145,7 @@ router.get("/profile/:id", (req, res, next) => {
   .then(resulDeal=>{ 
     res.render("auth/profile",{resulDeal, user: req.session.currentUser})
   })
-  .catch(e =>(console.log(e)))
+  .catch(e =>(next(e)))
 })
 
  router.get("/profile/:id/edit", (req, res, next) => {
@@ -162,11 +162,11 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
   let camposUpdate = {username, email, notification};
 
   if(req.body.notification === undefined) {
-    console.log("console.log del notification en el post del edit:", notification)
+  
     camposUpdate.notification = "off";
   }
    if(req.file) {
-    console.log("req.file.path:", req.file.path)
+   
     camposUpdate.avatar = req.file.path;
    }
 
@@ -193,7 +193,7 @@ router.post("/profile/:id/edit", uploader.single("imagen"), (req, res, next) => 
     req.session.currentUser.email = email;
     req.session.currentUser.notification = camposUpdate.notification;
     if(req.file) {
-      console.log("req.file.path:", req.file.path)
+      
       req.session.currentUser.avatar = camposUpdate.avatar;
      }
     res.redirect(`/auth/profile/${id}`)

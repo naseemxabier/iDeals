@@ -14,7 +14,7 @@ const uploader = require("../config/cloudinary.config");
 router.get("/dashboard", (req, res, next) => {
     User.find()
         .then(result => {
-            console.log("DASH", result)
+            
             res.render("auth/dashboard", { result: result, user: req.session.currentUser })
         })
         .catch(err => next(err))
