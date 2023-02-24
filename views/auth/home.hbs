@@ -3,12 +3,12 @@
 <div class="row mx-auto ms-5">
   {{#each result}}
 <div class="card mx-3 mb-3 mt-3" style="width: 18rem">
+  <h5 class="card-title">{{title}}</h5>
   <img src="{{filepath}}" class="rounded float-start mt-3" alt="Lights">
   <div class="card-body">
-    <h5 class="card-title">{{title}}</h5>
-    <p class="card-text"><strong>Description </strong><br> {{description}}</p>
-    <p class="card-text"><strong>Location </strong> <br> {{location}}</p>
-    <p class="card-text"><strong>User </strong> <br> {{creator.username}}</p>
+    <p class="card-text"><strong>Description </strong><br> {{description}}</p> 
+    {{!-- <p class="card-text"><strong>Location </strong> <br> {{location}}</p>
+    <p class="card-text"><strong>User </strong> <br> {{creator.username}}</p> --}}
     <a class ="btn btn-primary" href="/deals/{{_id}}/details">Details</a>
   </div>
 </div>

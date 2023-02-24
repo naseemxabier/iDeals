@@ -29,20 +29,15 @@ router.get("/home", (req, res, next) => {
     } )
   })
 
-//get de la vista /deal/add
-/* router.get('/add', (req,res,next)=>{
-    res.render('deals/add',{user: req.session.currentUser})
-}) */
 
 
 router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
     let {dealTitle, dealDescription, dealLocation} = req.body
+    console.log('BODY', req.body)
     let img = req.file
     /* console.log("img:", img) */
 
-
  if(dealTitle === "" || dealDescription === "" || dealLocation === "" || !img ){
-
     res.status(400).render("deals/add", {errorMessage:"All fields are mandatory."});
       return;
     }
@@ -52,54 +47,39 @@ router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
         title: req.body.dealTitle,
         description: req.body.dealDescription,
         location: req.body.dealLocation,
-        filepath: req.file.path,
-        
+        filepath: req.file.path,    
   })
-
-
  .then(result=>{
-    console.log(result)
+
     User.find({ notification: "on"})
     .then(result=>{
-      result.forEach ((user)=> {
-          envioMail(user.email, "Latest deals!", {name: user.username, dealTitle, dealDescription, dealLocation, img})
-          .then(result => {
-             res.redirect("/deals/home")
-          })
-          .catch(err=> console.log(err))
-      })
+        if(result.length > 0){
+            result.forEach ((user)=> {
+                   envioMail(user.email, "Latest deals!", {name: user.username, dealTitle, dealDescription, dealLocation, img})
+                  .then(result => {
+                     res.redirect("/deals/home")
+                  })
+              })  
+        }
+        else {res.redirect("/deals/home") }
     }) 
   })
   .catch(err=>next(err))
- 
- 
 })
 
 
 router.get('/:id/details', (req,res,next)=>{
-
    let id = req.params.id
    Deal.findById(id)
     .populate("creator")
     .then(result=>{
-     console.log("resultAAAAAAA", result) 
-     console.log("Session", req.session.currentUser )
+   /*   console.log("resultAAAAAAA", result) 
+     console.log("Session", req.session.currentUser ) */
         res.render('deals/details', {result:result, user: req.session.currentUser})
    })
     .catch(err=>next( err))
     
 })
- //router.get('/:id/edit', (req,res,next)=>{
- // let {id} = req.params
-   //console.log("id:",id)
- //   Deal.findById(id)
- //   .populate("creator")
- //   .then(result=>{
-  //      /* console.log("result", result) */
-  //      res.render('deals/details', {result:result})
- //   })
-  //  .catch(err=>next( err))
-//}) 
 
 router.get('/:id/edit', (req,res,next)=>{
     let id = req.params.id

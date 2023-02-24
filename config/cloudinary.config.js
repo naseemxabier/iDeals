@@ -13,7 +13,7 @@ const storage = new CloudinaryStorage({
     params: {
         allowed_formats: ['jpg', 'png'],
         folder: 'carpeta-prova',
-        // size: 1000000000 //1000MB
+       
     }
 })
 
