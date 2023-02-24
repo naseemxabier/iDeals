@@ -24,7 +24,7 @@ router.get("/home", (req, res, next) => {
     .populate("creator")
     .then(result => {
     /*    console.log("resultHOME", result)  */
-       /* console.log({result, user: req.session.currentUser}) */
+        console.log('USER', req.session.currentUser) 
        res.render("auth/home",{result:result.reverse(), user: req.session.currentUser}, )
     } )
   })
@@ -34,7 +34,7 @@ router.get("/home", (req, res, next) => {
 router.post('/add',  uploader.single("imagen"),  (req,res,next)=>{
     let {dealTitle, dealDescription, dealLocation} = req.body
     console.log('BODY', req.body)
-    let img = req.file
+    let img = req.file.path
     /* console.log("img:", img) */
 
  if(dealTitle === "" || dealDescription === "" || dealLocation === "" || !img ){

@@ -13,7 +13,7 @@
           <a class="nav-link active" aria-current="page" href="/deals/home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/deals/add">Add Deal</a>
+          <a class="nav-link" href="/deals/add">Add a Deal</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="/auth/profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,20 +22,17 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/auth/profile/{{user._id}}">My profile</a></li>
             <li><a class="dropdown-item" href="/auth/admin">Admin</a></li>
-            {{#if isAdmin}}
+            {{#if user.isAdmin}}
             <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
             {{/if}}
             <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
           </ul>
         </li>
       </ul>
-
     </div>
         <div> 
       <a
-       class="navbar-brand">Bienvenid@ {{user.username}}</a>
+       class="navbar-brand">Welcome {{user.username}}!</a>
     </div>
   </div>
 </nav>
-
-<a class="text-dark"></a>

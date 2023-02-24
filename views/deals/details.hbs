@@ -3,24 +3,14 @@
 
 <h1>Deal Details</h1>
 
-
-{{!-- <div class="card" style="width: 18rem;">
-  <img src="{{filepath}}" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{title}}</h5>
-    <p class="card-text">{{description}}</p>
-    <p class="card-text">{{location}}</p>
-    <p class="card-text">{{creator.username}}</p>
-  </div>
-</div>
-</div> --}}
 <form action="/deal/{{resul._id}}/details">
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row g-0">
+<div class="card mb-3" style="max-height: 25rem;">
+  <div class="row g-0 h-80">
     <div class="col-md-4">
-      <img src="{{result.filepath}}" class="img-fluid rounded " alt="...">
+      <img src="{{result.filepath}}" class="img-fluid rounded " alt="..." style="max-width: 25rem;">
     </div>
-    <div class="col-md-8">
+    <br>
+    <div class="col-md-8 h-50 rem" style="max-width: 25rem;">
       <div class="card-body">
         <h5 class="card-title">{{result.title}}</h5>
         <p class="card-text">{{result.description}}</p>
@@ -38,5 +28,4 @@
   
   </div>
 </div>
-<a href="/deals/home">Home</a>
 </form>

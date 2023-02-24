@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
   if (!req.session.currentUser) {
-    return res.render("auth/notlogin");
+    return res.render("/");
   }
 
   next();

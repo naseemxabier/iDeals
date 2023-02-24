@@ -4,10 +4,10 @@
 
     {{#each result}}
   <div class="card mx-3 mb-3 mt-3" style="width: 18rem">
-    <div class="thumbnail bg-dark p-2 g-col-6 mt-2">
-        <p class=" fs-4 text-white">Username:{{username}}</p>
-        <p class="card-text text-white">Email: <br>{{email}}</p>
-        <p class="card-text text-white">Is Admin: <br>{{isAdmin}}</p>
+    <div class="thumbnail p-2 g-col-6 mt-2">
+        <p class=" fs-4 text-dark">Username <br> {{username}}</p>
+        <p class="card-text text-dark"><strong>Email</strong> <br>{{email}}</p>
+        <p class="card-text text-dark"><strong>Admin</strong> <br>{{isAdmin}}</p>
 
         <form action="/admin/{{_id}}/delete" method="POST" > 
   <button type="submit" class="btn btn-primary text-dark">Delete</button>
